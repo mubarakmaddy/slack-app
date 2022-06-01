@@ -104,67 +104,69 @@ const authorizeFn = async (req, next) => {
 // Create an ExpressReceiver
 const receiver = new ExpressReceiver({
   signingSecret: SLACK_SIGNING_SECRET,
-  clientId: SLACK_CLIENT_ID,
-  clientSecret: SLACK_CLIENT_SECRET,
-  stateSecret: "my-secret",
-  scopes: ["chat:write"],
+  // clientId: SLACK_CLIENT_ID,
+  // clientSecret: SLACK_CLIENT_SECRET,
+  // stateSecret: "my-secret",
+  // scopes: ["chat:write"],
   // installerOptions: {
   //   // If below is true, /slack/install redirects installers to the Slack authorize URL
   //   // without rendering the web page with "Add to Slack" button.
   //   // This flag is available in @slack/bolt v3.7 or higher
   //   directInstall: true,
   // },
-  installationStore: {
-    storeInstallation: async (installation) => {
-      // replace database.set so it fetches from your database
-      if (
-        installation.isEnterpriseInstall &&
-        installation.enterprise !== undefined
-      ) {
-        // support for org wide app installation
-        return await database.set(installation.enterprise.id, installation);
-      }
-      if (installation.team !== undefined) {
-        // single team app installation
-        return await database.set(installation.team.id, installation);
-      }
-      throw new Error("Failed saving installation data to installationStore");
-    },
-    fetchInstallation: async (installQuery) => {
-      // replace database.get so it fetches from your database
-      if (
-        installQuery.isEnterpriseInstall &&
-        installQuery.enterpriseId !== undefined
-      ) {
-        // org wide app installation lookup
-        return await database.get(installQuery.enterpriseId);
-      }
-      if (installQuery.teamId !== undefined) {
-        // single team app installation lookup
-        return await database.get(installQuery.teamId);
-      }
-      throw new Error("Failed fetching installation");
-    },
-    deleteInstallation: async (installQuery) => {
-      // Bolt will pass your handler  an installQuery object
-      // Change the lines below so they delete from your database
-      if (
-        installQuery.isEnterpriseInstall &&
-        installQuery.enterpriseId !== undefined
-      ) {
-        // org wide app installation deletion
-        return await database.delete(installQuery.enterpriseId);
-      }
-      if (installQuery.teamId !== undefined) {
-        // single team app installation deletion
-        return await database.delete(installQuery.teamId);
-      }
-      throw new Error("Failed to delete installation");
-    },
-  },
+  // installationStore: {
+  //   storeInstallation: async (installation) => {
+  //     // replace database.set so it fetches from your database
+  //     if (
+  //       installation.isEnterpriseInstall &&
+  //       installation.enterprise !== undefined
+  //     ) {
+  //       // support for org wide app installation
+  //       return await database.set(installation.enterprise.id, installation);
+  //     }
+  //     if (installation.team !== undefined) {
+  //       // single team app installation
+  //       return await database.set(installation.team.id, installation);
+  //     }
+  //     throw new Error("Failed saving installation data to installationStore");
+  //   },
+  //   fetchInstallation: async (installQuery) => {
+  //     // replace database.get so it fetches from your database
+  //     if (
+  //       installQuery.isEnterpriseInstall &&
+  //       installQuery.enterpriseId !== undefined
+  //     ) {
+  //       // org wide app installation lookup
+  //       return await database.get(installQuery.enterpriseId);
+  //     }
+  //     if (installQuery.teamId !== undefined) {
+  //       // single team app installation lookup
+  //       return await database.get(installQuery.teamId);
+  //     }
+  //     throw new Error("Failed fetching installation");
+  //   },
+  //   deleteInstallation: async (installQuery) => {
+  //     // Bolt will pass your handler  an installQuery object
+  //     // Change the lines below so they delete from your database
+  //     if (
+  //       installQuery.isEnterpriseInstall &&
+  //       installQuery.enterpriseId !== undefined
+  //     ) {
+  //       // org wide app installation deletion
+  //       return await database.delete(installQuery.enterpriseId);
+  //     }
+  //     if (installQuery.teamId !== undefined) {
+  //       // single team app installation deletion
+  //       return await database.delete(installQuery.teamId);
+  //     }
+  //     throw new Error("Failed to delete installation");
+  //   },
+  // },
 });
 
 const app = new App({
+  signingSecret: SLACK_SIGNING_SECRET,
+  token: SLACK_BOT_TOKEN,
   receiver,
   logLevel: LogLevel.DEBUG,
 });
