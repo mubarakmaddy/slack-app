@@ -12,7 +12,16 @@ const {
   buildSlackInstallation,
 } = require('./helpers');
 
-const database = {};
+const databaseData = {};
+const database = {
+  set: async (key, data) => {
+    databaseData[key] = data;
+  },
+  get: async (key) => {
+    return databaseData[key];
+  },
+};
+
 
 const oauthStateCheck = () => {
   console.log('oauthStateCheck');
